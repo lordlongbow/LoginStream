@@ -16,6 +16,7 @@ import com.example.loginconobjectoutputstreamobjectinputstream.ui.register.Regis
 
 public class MainActivityViewModel extends AndroidViewModel{
 
+    private Context contexto;
     private MutableLiveData<Boolean> logueado = new MutableLiveData<>();
     private MutableLiveData<String> email;
     private MutableLiveData<String> password;
@@ -23,11 +24,12 @@ public class MainActivityViewModel extends AndroidViewModel{
 
         private ApiClient apiClient;
 
-    private Context contexto;
+
 
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
+        this.contexto = application.getApplicationContext();
         apiClient = new ApiClient();
     }
         public LiveData<Boolean> getLogueado() {

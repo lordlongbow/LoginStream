@@ -19,12 +19,19 @@ public class ApiClient {
     private static File archivo;
     //Guardar FileOutputStream, leer FileInputStream
     private static File conectar(File dir){
-
-        if(archivo == null){
-            archivo = new File(dir, "datos");
+        File archivo = new File(dir, "datos");
+        if (!archivo.exists()) {
+            try {
+                archivo.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return archivo;
     }
+
+
+
 
     public static void guardar(Context contexto, Usuario usuario){
         File archivo = conectar(contexto.getFilesDir());
@@ -63,23 +70,33 @@ public class ApiClient {
         }
     }
 
-    public static Usuario login(Context contexto, String mail, String password){
+
+    public static Usuario login(Context contexto, String mail, String password) {
         Usuario usuario = null;
         File archivo = conectar(contexto.getFilesDir());
-        try{
+        try {
             FileInputStream fis = new FileInputStream(archivo);
             BufferedInputStream bis = new BufferedInputStream(fis);
             ObjectInputStream ois = new ObjectInputStream(bis);
             usuario = (Usuario) ois.readObject();
             ois.close();
-            return usuario;
-        }catch(FileNotFoundException e){
-            throw new RuntimeException(e);
+
+            // Verificar si el correo y la contraseña proporcionados coinciden con los valores almacenados en el archivo
+            if (usuario.getMail().equals(mail) && usuario.getPassword().equals(password)) {
+                return usuario;
+            } else {
+                return null;
+            }
+
+        } catch (FileNotFoundException e) {
+            // En caso de que el archivo no exista, se devuelve null
+            return null;
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
+
 
 }

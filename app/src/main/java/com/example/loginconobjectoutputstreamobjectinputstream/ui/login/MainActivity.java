@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
             setContentView(binding.getRoot());
            vm = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
+
             // Observar el LiveData que indica si el inicio de sesión es válido
             vm.getLogueado().observe(this, new Observer<Boolean>() {
                 @Override
